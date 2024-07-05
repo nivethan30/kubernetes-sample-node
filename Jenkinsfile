@@ -4,7 +4,7 @@ pipeline {
     environment {
         // Define your Docker registry credentials as environment variables
         registryCredentials = 'docker-credential'
-        dockerImageTag = "nivethan30/sample-node:v1"
+        dockerImageTag = "nivethan30/sample-node:v2"
         storageDir = "/home/m1/sample-node"
         kubeconfig = "kube-config"
     }
