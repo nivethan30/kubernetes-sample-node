@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         registryCredentials = 'docker-credential' // Replace with your actual credentials ID
-        dockerImageTag = "nivethan30/sample-node:v1"
+        dockerImageTag = "nivethan30/sample-node:v2"
         storageDir = "/home/m1/sample-node"
         kubeconfig = "kube-config"
     }
