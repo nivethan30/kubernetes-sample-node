@@ -40,7 +40,7 @@ pipeline {
             steps {
                 script {
                     // Push Docker image to registry
-                    docker.withRegistry('', registryCredentials) {
+                    docker.withRegistry('https://registry.hub.docker.com', registryCredentials) {
                         def dockerImage = docker.image(dockerImageTag)
                         dockerImage.push()
                     }
