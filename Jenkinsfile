@@ -6,6 +6,7 @@ pipeline {
         registryCredentials = 'docker-credential'
         dockerImageTag = "nivethan30/sample-node:v1"
         storageDir = "/home/m1/sample-node"
+        kubeconfig = "kube-config"
     }
     
     stages {
@@ -46,6 +47,35 @@ pipeline {
                     }
                 }
             }
+        }
+
+        stage('Deploy Node Application'){
+            steps{
+                script{
+                    withCredentials([File(credentialsId: kubeconfig, variable: 'kube' )]){
+                        sh "kubectl --kubeconfig=${kube} apply -f ${storageDir}/kubernetes/sample-node-deployment.yaml"
+                    }
+                }
+            }
+        }
+
+        stage('Expose Node Application Service'){
+            steps{
+                script{
+                    withCredentials([File(credentialsId: kubeconfig, variable: 'kube' )]){
+                        sh "kubectl --kubeconfig=${kube} apply -f ${storageDir}/kubernetes/sample-node-service.yaml"
+                    }
+                }
+            }
+        }
+    }
+
+    post{
+        success{
+            echo "Pipeline Completed Successfully"
+        }
+        failure{
+            echo 'Pipeline Failed'
         }
     }
 }
