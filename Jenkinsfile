@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         // Define your Docker registry credentials as environment variables
-        registryCredentials = credentials('docker-credential')
+        registryCredentials = 'docker-credential'
         dockerImageTag = "nivethan30/sample-node:v1"
         storageDir = "/home/m1/sample-node"
     }
