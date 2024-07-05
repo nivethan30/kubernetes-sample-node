@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sample-node-deployment
+  namespace: sample-node
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: sample-node
+  template:
+    metadata:
+      labels:
+        app: sample-node
+    spec:
+      containers:
+      - name: sample-node
+        image: nivethan30/sample-node:v1
+        ports:
+        - containerPort: 3000
