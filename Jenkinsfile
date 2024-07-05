@@ -4,7 +4,7 @@ pipeline {
     environment {
         // Define your Docker registry credentials as environment variables
         registryCredentials = 'docker-credential'
-        dockerImageTag = "nivethan30/sample-node:v2"
+        dockerImageTag = "nivethan30/sample-node:v1"
         storageDir = "/home/m1/sample-node"
         kubeconfig = "kube-config"
     }
@@ -53,7 +53,9 @@ pipeline {
             steps{
                 script{
                     withCredentials([File(credentialsId: kubeconfig, variable: 'kube' )]){
-                        sh "kubectl --kubeconfig=${kube} apply -f ${storageDir}/kubernetes/sample-node-deployment.yaml"
+                        sh '''
+                        kubectl --kubeconfig=${kube} apply -f ${storageDir}/kubernetes/sample-node-deployment.yaml
+                        '''
                     }
                 }
             }
@@ -63,7 +65,9 @@ pipeline {
             steps{
                 script{
                     withCredentials([File(credentialsId: kubeconfig, variable: 'kube' )]){
-                        sh "kubectl --kubeconfig=${kube} apply -f ${storageDir}/kubernetes/sample-node-service.yaml"
+                        sh '''
+                        kubectl --kubeconfig=${kube} apply -f ${storageDir}/kubernetes/sample-node-service.yaml
+                        '''
                     }
                 }
             }
