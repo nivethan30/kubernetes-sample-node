@@ -2,8 +2,7 @@ pipeline {
     agent any
 
     environment {
-        // Define your Docker registry credentials as environment variables
-        registryCredentials = 'docker-credential'
+        registryCredentials = 'docker-credential' // Replace with your actual credentials ID
         dockerImageTag = "nivethan30/sample-node:v1"
         storageDir = "/home/m1/sample-node"
         kubeconfig = "kube-config"
@@ -41,7 +40,7 @@ pipeline {
             steps {
                 script {
                     // Push Docker image to registry
-                    docker.withRegistry('https://registry.hub.docker.com', registryCredentials) {
+                    docker.withRegistry('https://index.docker.io/v1/', registryCredentials) {
                         def dockerImage = docker.image(dockerImageTag)
                         dockerImage.push()
                     }
@@ -49,10 +48,10 @@ pipeline {
             }
         }
 
-        stage('Deploy Node Application'){
-            steps{
-                script{
-                    withCredentials([File(credentialsId: kubeconfig, variable: 'kube' )]){
+        stage('Deploy Node Application') {
+            steps {
+                script {
+                    withCredentials([file(credentialsId: kubeconfig, variable: 'kube')]) {
                         sh '''
                         kubectl --kubeconfig=${kube} apply -f ${storageDir}/kubernetes/sample-node-deployment.yaml
                         '''
@@ -61,10 +60,10 @@ pipeline {
             }
         }
 
-        stage('Expose Node Application Service'){
-            steps{
-                script{
-                    withCredentials([File(credentialsId: kubeconfig, variable: 'kube' )]){
+        stage('Expose Node Application Service') {
+            steps {
+                script {
+                    withCredentials([file(credentialsId: kubeconfig, variable: 'kube')]) {
                         sh '''
                         kubectl --kubeconfig=${kube} apply -f ${storageDir}/kubernetes/sample-node-service.yaml
                         '''
@@ -74,11 +73,11 @@ pipeline {
         }
     }
 
-    post{
-        success{
+    post {
+        success {
             echo "Pipeline Completed Successfully"
         }
-        failure{
+        failure {
             echo 'Pipeline Failed'
         }
     }
